@@ -4,9 +4,10 @@
 #
 #	David Scholten	2016-05-10
 #
-#	1.0	Initial Build
+#	1.1	Initial Build
 #
 
+$rsync_target="CHANGE_TO_RSYNC_LOCATION"
 
 if [[ $EUID -ne 0 ]]; then
    echo "Please run this script as root"
@@ -15,14 +16,14 @@ if [[ $EUID -ne 0 ]]; then
 else
 
 	#copy the install files from tech_common
-	rsync -rpt svr-fil1::tech_common/install_packages/Linux/LibreOffice/LibreOffice_5*/DEBS /home/dscholten/
-	cd /home/dscholten
+	cd $HOME
+	rsync -rpt $rsync_target ./
 
 	#remove LibreOffice 4.x
-	apt-get -s -y purge libreoffice*
+	apt-get -y purge libreoffice*
 	
 	#install LibreOffice 5.x
-	dpkg --simulate -i *.deb
+	dpkg -i *.deb
 
 fi
 
